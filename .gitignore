@@ -1,0 +1,14 @@
+# Compiled Go binary
+*.exe
+
+# Compiled Go binary for macOS
+*.app
+
+# Compiled Go binary for Linux
+*.out
+
+# Generated files by go test
+*.test
+
+# Ignore the vendor directory
+/vendor/
