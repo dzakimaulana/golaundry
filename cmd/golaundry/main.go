@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/dzakimaulana/golaundry/internal/items"
 	"github.com/dzakimaulana/golaundry/internal/users"
 	"github.com/dzakimaulana/golaundry/pkg/database"
 	"github.com/dzakimaulana/golaundry/pkg/routes"
@@ -21,4 +22,14 @@ func main() {
 	userSvc := users.NewService(userRepo)
 	userHandler := users.NewHandler(userSvc)
 	routes.UserRouter(userHandler, app)
+
+	itemRepo := items.NewRepository(dbConn.GetDB())
+	itemSvc := items.NewService(itemRepo)
+	itemHandler := items.NewHandler(itemSvc)
+	routes.ItemRouter(itemHandler, app)
+
+	err = app.Listen(":3000")
+	if err != nil {
+		panic("Error starting server")
+	}
 }

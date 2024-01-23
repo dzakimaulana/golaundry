@@ -7,13 +7,14 @@ import (
 )
 
 type User struct {
-	ID       uuid.UUID `json:"id"`
+	ID       uuid.UUID `gorm:"primaryKey" json:"id"`
 	Username string    `jsin:"username"`
 	Password string    `json:"password"`
+	Role     string    `json:"role"`
 }
 
 type CreateUserReq struct {
-	Username string `jsin:"username"`
+	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
@@ -28,8 +29,8 @@ type LoginReq struct {
 }
 
 type LoginRes struct {
-	accessToken string
 	ID          uuid.UUID `json:"id"`
+	AccessToken string    `json:"access_token"`
 	Username    string    `json:"username"`
 }
 

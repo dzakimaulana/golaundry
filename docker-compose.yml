@@ -1,11 +1,10 @@
 version: "3.8"
-
 services:
-  postgres_db:
-    container_name: postgres_golaundry
+  postgres-golaundry:
+    container_name: postgres-golaundry
     image: postgres
     restart: always
-    entrypoint: 
+    environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: golaundry
@@ -14,8 +13,8 @@ services:
     ports:
       - "5432:5432"
   pgadmin:
-    container_name: pgadmin_container
-    image: elestio/pgadmin
+    container_name: pgadmin4
+    image: dpage/pgadmin4
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
@@ -23,4 +22,4 @@ services:
     volumes:
       - ./servers.json:/pgadmin4/servers.json
     ports:
-      - "5050:8080"
+      - "5050:80"

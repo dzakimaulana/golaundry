@@ -31,6 +31,7 @@ func (s *service) CreateUser(ctx context.Context, req *CreateUserReq) (*CreateUs
 	}
 
 	u := &User{
+		ID:       uuid.New(),
 		Username: req.Username,
 		Password: hashedPassword,
 	}
@@ -41,7 +42,7 @@ func (s *service) CreateUser(ctx context.Context, req *CreateUserReq) (*CreateUs
 	}
 
 	res := &CreateUserRes{
-		ID:       uuid.New(),
+		ID:       r.ID,
 		Username: r.Username,
 	}
 
@@ -73,7 +74,7 @@ func (s *service) Login(ctx context.Context, req *LoginReq) (*LoginRes, error) {
 	}
 
 	return &LoginRes{
-		accessToken: token,
+		AccessToken: token,
 		ID:          u.ID,
 		Username:    u.Username,
 	}, nil

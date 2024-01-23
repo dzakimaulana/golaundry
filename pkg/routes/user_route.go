@@ -7,6 +7,6 @@ import (
 
 func UserRouter(h *users.Handler, f *fiber.App) {
 	user := f.Group("/api/user")
-	user.Get("/login")
-	user.Get("/create-user", h.CreateUser)
+	user.Post("/login", h.Login)
+	user.Post("/create-user", h.CreateUser)
 }

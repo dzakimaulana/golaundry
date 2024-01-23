@@ -1,8 +1,16 @@
+BINARY_NAME=golaundry
+BUILD_DIR=./bin
+CMD_DIR=./cmd/golaundry
+
 build:
-	go build -o bin/golaundry
+	go build -o ${BUILD_DIR}/${BINARY_NAME} ${CMD_DIR}/main.go
 
 run: build
-	./bin/golaundry
+	${BUILD_DIR}/${BINARY_NAME}
 
 test:
 	go test -v ./...
+
+clean:
+	go clean
+	del /q ${BUILD_DIR}/${BINARY_NAME}
