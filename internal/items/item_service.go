@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/dzakimaulana/golaundry/pkg/models"
 	"github.com/google/uuid"
 )
 
@@ -19,16 +20,16 @@ func NewService(r ItemRepository) ItemService {
 	}
 }
 
-func (s *service) AddItem(ctx context.Context, req *AddReq) (*AddRes, error) {
+func (s *service) AddItem(ctx context.Context, req *ItemReq) (*ItemRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
-	i := &Items{
-		ID:    uuid.New(),
-		Name:  req.Name,
-		Price: req.Price,
-		Unit:  req.Unit,
-		Time:  req.Time,
+	i := &models.Items{
+		ID:       uuid.New(),
+		Name:     req.Name,
+		Price:    req.Price,
+		Unit:     req.Unit,
+		Duration: req.Duration,
 	}
 
 	r, err := s.ItemRepository.AddItem(ctx, i)
@@ -36,12 +37,12 @@ func (s *service) AddItem(ctx context.Context, req *AddReq) (*AddRes, error) {
 		return nil, err
 	}
 
-	res := &AddRes{
-		ID:    r.ID,
-		Name:  r.Name,
-		Price: r.Price,
-		Unit:  r.Unit,
-		Time:  r.Time,
+	res := &ItemRes{
+		ID:       r.ID,
+		Name:     r.Name,
+		Price:    r.Price,
+		Unit:     r.Unit,
+		Duration: r.Duration,
 	}
 	return res, nil
 }
@@ -55,8 +56,35 @@ func (s *service) GetItem(ctx context.Context, name string) (*GetRes, error) {
 		return nil, err
 	}
 
-	res := &GetRes{
-		Items: r,
+	var res GetRes
+	res.Items = &[]ItemRes{}
+	for _, it := range *r {
+		*res.Items = append(*res.Items, ItemRes{
+			ID:       it.ID,
+			Name:     it.Name,
+			Price:    it.Price,
+			Unit:     it.Unit,
+			Duration: it.Duration,
+		})
+	}
+	return &res, nil
+}
+
+func (s *service) GetItemByID(ctx context.Context, id string) (*ItemResByID, error) {
+	ctx, cancel := context.WithTimeout(ctx, s.timeout)
+	defer cancel()
+
+	r, err := s.ItemRepository.GetItemByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	res := &ItemResByID{
+		ID:           r.ID,
+		Name:         r.Name,
+		Price:        r.Price,
+		Unit:         r.Unit,
+		Duration:     r.Duration,
+		Transactions: *r.Transactions,
 	}
 	return res, nil
 }
@@ -65,12 +93,12 @@ func (s *service) UpdateItem(ctx context.Context, req *UpdateReq) (*UpdateRes, e
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
-	i := &Items{
-		ID:    req.ID,
-		Name:  req.Name,
-		Price: req.Price,
-		Unit:  req.Unit,
-		Time:  req.Time,
+	i := &models.Items{
+		ID:       req.ID,
+		Name:     req.Name,
+		Price:    req.Price,
+		Unit:     req.Unit,
+		Duration: req.Duration,
 	}
 
 	r, err := s.ItemRepository.UpdateItem(ctx, i)
@@ -79,11 +107,11 @@ func (s *service) UpdateItem(ctx context.Context, req *UpdateReq) (*UpdateRes, e
 	}
 
 	res := &UpdateRes{
-		ID:    r.ID,
-		Name:  r.Name,
-		Price: r.Price,
-		Unit:  r.Unit,
-		Time:  r.Time,
+		ID:       r.ID,
+		Name:     r.Name,
+		Price:    r.Price,
+		Unit:     r.Unit,
+		Duration: r.Duration,
 	}
 	return res, nil
 }

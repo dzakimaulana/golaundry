@@ -34,6 +34,11 @@ type LoginRes struct {
 	Username    string    `json:"username"`
 }
 
+type UserRes struct {
+	ID       uuid.UUID `json:"id"`
+	Username string    `jsin:"username"`
+}
+
 type UserRepository interface {
 	CreateUser(ctx context.Context, user *User) (*User, error)
 	GetUserByUsername(ctx context.Context, username string) (*User, error)

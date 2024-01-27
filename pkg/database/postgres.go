@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/dzakimaulana/golaundry/pkg/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -28,6 +29,13 @@ func DatabaseConn() (*Database, error) {
 	if err != nil {
 		return nil, err
 	}
+	db.AutoMigrate(
+		&models.Customers{},
+		&models.Items{},
+		&models.User{},
+		&models.Transactions{},
+		&models.TransactionsItems{},
+	)
 	return &Database{db: db}, nil
 }
 

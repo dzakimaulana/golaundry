@@ -3,50 +3,52 @@ package items
 import (
 	"context"
 
+	"github.com/dzakimaulana/golaundry/pkg/models"
 	"github.com/google/uuid"
 )
 
-type Items struct {
-	ID    uuid.UUID `gorm:"primaryKey" json:"id"`
-	Name  string    `json:"name"`
-	Price int64     `json:"price"`
-	Unit  string    `json:"unit"`
-	Time  int64     `json:"time"`
+type ItemReq struct {
+	Name     string `json:"name"`
+	Price    int64  `json:"price"`
+	Unit     string `json:"unit"`
+	Duration int64  `json:"duration"`
 }
 
-type AddReq struct {
-	Name  string `json:"name"`
-	Price int64  `json:"price"`
-	Unit  string `json:"unit"`
-	Time  int64  `json:"time"`
+type ItemRes struct {
+	ID       uuid.UUID `json:"id"`
+	Name     string    `json:"name"`
+	Price    int64     `json:"price"`
+	Unit     string    `json:"unit"`
+	Duration int64     `json:"duration"`
 }
 
-type AddRes struct {
-	ID    uuid.UUID `json:"id"`
-	Name  string    `json:"name"`
-	Price int64     `json:"price"`
-	Unit  string    `json:"unit"`
-	Time  int64     `json:"time"`
+type ItemResByID struct {
+	ID           uuid.UUID                  `json:"id"`
+	Name         string                     `json:"name"`
+	Price        int64                      `json:"price"`
+	Unit         string                     `json:"unit"`
+	Duration     int64                      `json:"duration"`
+	Transactions []models.TransactionsItems `json:"transactions"`
 }
 
 type GetRes struct {
-	Items *[]Items `json:"items"`
+	Items *[]ItemRes `json:"items"`
 }
 
 type UpdateReq struct {
-	ID    uuid.UUID `json:"id"`
-	Name  string    `json:"name"`
-	Price int64     `json:"price"`
-	Unit  string    `json:"unit"`
-	Time  int64     `json:"time"`
+	ID       uuid.UUID `json:"id"`
+	Name     string    `json:"name"`
+	Price    int64     `json:"price"`
+	Unit     string    `json:"unit"`
+	Duration int64     `json:"duration"`
 }
 
 type UpdateRes struct {
-	ID    uuid.UUID `json:"id"`
-	Name  string    `json:"name"`
-	Price int64     `json:"price"`
-	Unit  string    `json:"unit"`
-	Time  int64     `json:"time"`
+	ID       uuid.UUID `json:"id"`
+	Name     string    `json:"name"`
+	Price    int64     `json:"price"`
+	Unit     string    `json:"unit"`
+	Duration int64     `json:"duration"`
 }
 
 type DelReq struct {
@@ -54,15 +56,17 @@ type DelReq struct {
 }
 
 type ItemRepository interface {
-	AddItem(ctx context.Context, item *Items) (*Items, error)
-	GetItem(ctx context.Context, name string) (*[]Items, error)
-	UpdateItem(ctx context.Context, item *Items) (*Items, error)
+	AddItem(ctx context.Context, item *models.Items) (*models.Items, error)
+	GetItem(ctx context.Context, name string) (*[]models.Items, error)
+	GetItemByID(ctx context.Context, id string) (*models.Items, error)
+	UpdateItem(ctx context.Context, item *models.Items) (*models.Items, error)
 	DeleteItem(ctx context.Context, id string) error
 }
 
 type ItemService interface {
-	AddItem(ctx context.Context, req *AddReq) (*AddRes, error)
+	AddItem(ctx context.Context, req *ItemReq) (*ItemRes, error)
 	GetItem(ctx context.Context, name string) (*GetRes, error)
+	GetItemByID(ctx context.Context, id string) (*ItemResByID, error)
 	UpdateItem(ctx context.Context, req *UpdateReq) (*UpdateRes, error)
 	DeleteItem(ctx context.Context, req *DelReq) error
 }

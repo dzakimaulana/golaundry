@@ -15,7 +15,7 @@ func NewHandler(s ItemService) *Handler {
 }
 
 func (h *Handler) AddItem(c *fiber.Ctx) error {
-	var item AddReq
+	var item ItemReq
 	if err := c.BodyParser(&item); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid JSON format",
