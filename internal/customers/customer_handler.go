@@ -2,7 +2,6 @@ package customers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 type Handler struct {
@@ -34,18 +33,21 @@ func (h *Handler) AddNewCustomer(c *fiber.Ctx) error {
 	})
 }
 
-func (h *Handler) GetCustomerByID(c *fiber.Ctx) error {
-	id := c.Params("id")
-	csId, err := uuid.Parse(id)
-	if id == "" || err != nil {
+func (h *Handler) GetAllCustomer(c *fiber.Ctx) error {
+	res, err := h.CustomerService.GetAllCustomers(c.Context())
+	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "id parameter not detected",
 		})
 	}
-	cs := &CusIdReq{
-		ID: csId,
-	}
-	res, err := h.CustomerService.GetCustomerByID(c.Context(), cs)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": res,
+	})
+}
+
+func (h *Handler) GetCustomerByID(c *fiber.Ctx) error {
+	id := c.Params("id")
+	res, err := h.CustomerService.GetCustomerByID(c.Context(), id)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "internal server error",

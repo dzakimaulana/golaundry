@@ -45,6 +45,19 @@ func (h *Handler) GetItem(c *fiber.Ctx) error {
 	})
 }
 
+func (h *Handler) GetItemByID(c *fiber.Ctx) error {
+	id := c.Params("id")
+	res, err := h.ItemService.GetItemByID(c.Context(), id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "internal server error",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": res,
+	})
+}
+
 func (h *Handler) UpdateItem(c *fiber.Ctx) error {
 	var item UpdateReq
 	if err := c.BodyParser(&item); err != nil {

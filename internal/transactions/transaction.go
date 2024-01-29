@@ -14,28 +14,6 @@ type TransactionReq struct {
 	Items    []transitems.TransItemsReq `json:"items"`
 }
 
-type TransactionRes struct {
-	ID         uuid.UUID `gorm:"primaryKey" json:"id"`
-	CustomerID uuid.UUID `json:"customer_id"`
-	UserID     uuid.UUID `json:"user_id"`
-	TimeIn     int64     `json:"time_in"`
-	TimeOut    int64     `json:"time_out"`
-	Total      int64     `json:"total"`
-}
-
-type TransactionByID struct {
-	ID       uuid.UUID                  `gorm:"primaryKey" json:"id"`
-	Customer models.Customers           `gorm:"foreignKey:ID" json:"customers"`
-	Items    []models.TransactionsItems `gorm:"foreignKey:ID" json:"items"`
-	TimeIn   int64                      `json:"time_in"`
-	TimeOut  int64                      `json:"time_out"`
-	Total    int64                      `json:"total"`
-}
-
-type GetAllRes struct {
-	Transactions *[]TransactionRes `json:"transactions"`
-}
-
 type TransactionRepository interface {
 	AddTs(ctx context.Context, t *models.Transactions) (*models.Transactions, error)
 	GetAllTs(ctx context.Context) (*[]models.Transactions, error)
@@ -46,7 +24,7 @@ type TransactionRepository interface {
 }
 
 type TransactionService interface {
-	AddTs(ctx context.Context, t *TransactionReq) (*TransactionRes, error)
-	GetAllTs(ctx context.Context) (*GetAllRes, error)
-	GetTsById(ctx context.Context, id string) (*TransactionByID, error)
+	AddTs(ctx context.Context, t *TransactionReq) (*models.TransactionsRes, error)
+	GetAllTs(ctx context.Context) (*[]models.TransactionsRes, error)
+	GetTsById(ctx context.Context, id string) (*models.TransactionResByID, error)
 }

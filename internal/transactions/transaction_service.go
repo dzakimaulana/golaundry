@@ -20,7 +20,7 @@ func NewService(r TransactionRepository) TransactionService {
 	}
 }
 
-func (s *service) AddTs(ctx context.Context, t *TransactionReq) (*TransactionRes, error) {
+func (s *service) AddTs(ctx context.Context, t *TransactionReq) (*models.TransactionsRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -78,7 +78,7 @@ func (s *service) AddTs(ctx context.Context, t *TransactionReq) (*TransactionRes
 		return nil, err
 	}
 
-	res := &TransactionRes{
+	res := &models.TransactionsRes{
 		ID:         r.ID,
 		CustomerID: r.CustomerID,
 		UserID:     r.UserID,
@@ -89,7 +89,7 @@ func (s *service) AddTs(ctx context.Context, t *TransactionReq) (*TransactionRes
 	return res, nil
 }
 
-func (s *service) GetAllTs(ctx context.Context) (*GetAllRes, error) {
+func (s *service) GetAllTs(ctx context.Context) (*[]models.TransactionsRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -98,10 +98,9 @@ func (s *service) GetAllTs(ctx context.Context) (*GetAllRes, error) {
 		return nil, err
 	}
 
-	var res GetAllRes
-	res.Transactions = &[]TransactionRes{}
+	var res []models.TransactionsRes
 	for _, ts := range *r {
-		*res.Transactions = append(*res.Transactions, TransactionRes{
+		res = append(res, models.TransactionsRes{
 			ID:         ts.ID,
 			CustomerID: ts.CustomerID,
 			UserID:     ts.UserID,
@@ -113,7 +112,7 @@ func (s *service) GetAllTs(ctx context.Context) (*GetAllRes, error) {
 	return &res, nil
 }
 
-func (s *service) GetTsById(ctx context.Context, id string) (*TransactionByID, error) {
+func (s *service) GetTsById(ctx context.Context, id string) (*models.TransactionResByID, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -122,10 +121,25 @@ func (s *service) GetTsById(ctx context.Context, id string) (*TransactionByID, e
 		return nil, err
 	}
 
-	res := &TransactionByID{
+	var resItem []models.TransItemsResTs
+	for _, dataItem := range *r.Items {
+		resItem = append(resItem, models.TransItemsResTs{
+			ItemsID:  dataItem.ItemsID,
+			Quantity: dataItem.Quantity,
+			Amount:   dataItem.Amount,
+		})
+	}
+
+	resUser := &models.UserRes{
+		ID:       r.User.ID,
+		Username: r.User.Username,
+	}
+
+	res := &models.TransactionResByID{
 		ID:       r.ID,
 		Customer: *r.Customer,
-		Items:    *r.Items,
+		User:     *resUser,
+		Items:    resItem,
 		TimeIn:   r.TimeIn,
 		TimeOut:  r.TimeOut,
 		Total:    r.Total,

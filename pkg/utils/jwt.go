@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 )
 
 var secretKey = "secret"
@@ -39,4 +40,12 @@ func DecodeToken(tokenString string) (jwt.MapClaims, error) {
 		return claims, nil
 	}
 	return nil, fmt.Errorf("Invalid token")
+}
+
+func UUIDv4() (string, error) {
+	uuidObj, err := uuid.NewRandom()
+	if err != nil {
+		return "", err
+	}
+	return uuidObj.String(), nil
 }

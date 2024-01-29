@@ -20,7 +20,7 @@ func NewService(r ItemRepository) ItemService {
 	}
 }
 
-func (s *service) AddItem(ctx context.Context, req *ItemReq) (*ItemRes, error) {
+func (s *service) AddItem(ctx context.Context, req *ItemReq) (*models.ItemRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -37,7 +37,7 @@ func (s *service) AddItem(ctx context.Context, req *ItemReq) (*ItemRes, error) {
 		return nil, err
 	}
 
-	res := &ItemRes{
+	res := &models.ItemRes{
 		ID:       r.ID,
 		Name:     r.Name,
 		Price:    r.Price,
@@ -47,7 +47,7 @@ func (s *service) AddItem(ctx context.Context, req *ItemReq) (*ItemRes, error) {
 	return res, nil
 }
 
-func (s *service) GetItem(ctx context.Context, name string) (*GetRes, error) {
+func (s *service) GetItem(ctx context.Context, name string) (*[]models.ItemRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -56,10 +56,9 @@ func (s *service) GetItem(ctx context.Context, name string) (*GetRes, error) {
 		return nil, err
 	}
 
-	var res GetRes
-	res.Items = &[]ItemRes{}
+	var res []models.ItemRes
 	for _, it := range *r {
-		*res.Items = append(*res.Items, ItemRes{
+		res = append(res, models.ItemRes{
 			ID:       it.ID,
 			Name:     it.Name,
 			Price:    it.Price,
@@ -70,7 +69,7 @@ func (s *service) GetItem(ctx context.Context, name string) (*GetRes, error) {
 	return &res, nil
 }
 
-func (s *service) GetItemByID(ctx context.Context, id string) (*ItemResByID, error) {
+func (s *service) GetItemByID(ctx context.Context, id string) (*models.ItemResByID, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -78,18 +77,28 @@ func (s *service) GetItemByID(ctx context.Context, id string) (*ItemResByID, err
 	if err != nil {
 		return nil, err
 	}
-	res := &ItemResByID{
+
+	var resTs []models.TransItemsResIt
+	for _, dataTs := range *r.Transactions {
+		resTs = append(resTs, models.TransItemsResIt{
+			TransactionsID: dataTs.TransactionsID,
+			Quantity:       dataTs.Quantity,
+			Amount:         dataTs.Amount,
+		})
+	}
+
+	res := &models.ItemResByID{
 		ID:           r.ID,
 		Name:         r.Name,
 		Price:        r.Price,
 		Unit:         r.Unit,
 		Duration:     r.Duration,
-		Transactions: *r.Transactions,
+		Transactions: resTs,
 	}
 	return res, nil
 }
 
-func (s *service) UpdateItem(ctx context.Context, req *UpdateReq) (*UpdateRes, error) {
+func (s *service) UpdateItem(ctx context.Context, req *UpdateReq) (*models.ItemRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -106,7 +115,7 @@ func (s *service) UpdateItem(ctx context.Context, req *UpdateReq) (*UpdateRes, e
 		return nil, err
 	}
 
-	res := &UpdateRes{
+	res := &models.ItemRes{
 		ID:       r.ID,
 		Name:     r.Name,
 		Price:    r.Price,

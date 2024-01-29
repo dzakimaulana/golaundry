@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/dzakimaulana/golaundry/pkg/models"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -18,15 +19,24 @@ func NewRepository(db *gorm.DB) CustomerRespository {
 }
 
 func (r *repository) AddNewCustomer(ctx context.Context, cs *models.Customers) (*models.Customers, error) {
-	if err := r.DB.Create(cs).Error; err != nil {
+	cs.ID = uuid.New()
+	if err := r.DB.Create(&cs).Error; err != nil {
 		return nil, err
 	}
 	return cs, nil
 }
 
+func (r *repository) GetAllCustomer(ctx context.Context) (*[]models.Customers, error) {
+	var cs []models.Customers
+	if err := r.DB.Find(&cs).Error; err != nil {
+		return nil, err
+	}
+	return &cs, nil
+}
+
 func (r *repository) GetCustomerByID(ctx context.Context, id string) (*models.Customers, error) {
 	var cs models.Customers
-	if err := r.DB.First(&cs, "id = ?", id).Error; err != nil {
+	if err := r.DB.Model(&models.Customers{}).Preload("Transactions").First(&cs, "id = ?", id).Error; err != nil {
 		return nil, err
 	}
 	return &cs, nil

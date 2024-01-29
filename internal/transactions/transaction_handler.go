@@ -1,6 +1,10 @@
 package transactions
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+)
 
 type Handler struct {
 	TransactionService
@@ -19,7 +23,10 @@ func (h *Handler) AddTs(c *fiber.Ctx) error {
 			"error": "Invalid JSON format",
 		})
 	}
-
+	userinfo := c.Locals("userinfo").(jwt.MapClaims)
+	id := userinfo["sub"].(string)
+	uuid, _ := uuid.Parse(id)
+	ts.UserID = uuid
 	res, err := h.TransactionService.AddTs(c.Context(), &ts)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
