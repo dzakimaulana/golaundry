@@ -2,13 +2,18 @@ version: "3.8"
 services:
   golaundry:
     container_name: golaundry
-    image: golaundry
+    image: kymmsenpai/golaundry
     restart: always
     environment:
       POSTGRES_HOST: postgres-golaundry
       POSTGRES_PORT: 5432
     ports:
-      - "8080:3000"
+      - "3000:3000"
+    networks:
+      - golaundry_network
+    depends_on:
+      - postgres-golaundry
+
   postgres-golaundry:
     container_name: postgres-golaundry
     image: postgres
@@ -21,6 +26,9 @@ services:
       - ./data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - golaundry_network
+
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4

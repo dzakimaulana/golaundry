@@ -7,26 +7,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
-// func Auth(ctx *fiber.Ctx) error {
-// 	sess, err := session.Get
-// 	token := sess.Get
-
-// 	if token == "" {
-// 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-// 			"error": "unauthorized",
-// 		})
-// 	}
-
-// 	claims, err := utils.DecodeToken(token)
-// 	if err != nil {
-// 		return ctx.Status(fiber.StatusForbidden).JSON(fiber.Map{
-// 			"error": "forbidden",
-// 		})
-// 	}
-// 	ctx.Locals("userinfo", claims)
-// 	return ctx.Next()
-// }
-
 func GetSession(session *session.Store) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		sess, err := session.Get(c)
