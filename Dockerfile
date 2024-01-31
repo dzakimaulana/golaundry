@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o ./bin/golaundry
+RUN go build -o ./bin/golaundry ./cmd/golaundry/main.go
 
 EXPOSE 8080
 
