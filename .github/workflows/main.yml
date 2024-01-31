@@ -29,7 +29,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with: 
-          golang-version: 1.21.5
+          golang-version: 1.23
       - name: Test with testing
         run: |
           make test
