@@ -5,27 +5,25 @@ import (
 	"time"
 
 	"github.com/dzakimaulana/golaundry/pkg/models"
-	"github.com/google/uuid"
 )
 
-type service struct {
+type Service struct {
 	ItemRepository
 	timeout time.Duration
 }
 
 func NewService(r ItemRepository) ItemService {
-	return &service{
+	return &Service{
 		ItemRepository: r,
 		timeout:        time.Duration(2) * time.Second,
 	}
 }
 
-func (s *service) AddItem(ctx context.Context, req *ItemReq) (*models.ItemRes, error) {
+func (s *Service) AddItem(ctx context.Context, req *ItemReq) (*models.ItemRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
 	i := &models.Items{
-		ID:       uuid.New(),
 		Name:     req.Name,
 		Price:    req.Price,
 		Unit:     req.Unit,
@@ -47,7 +45,7 @@ func (s *service) AddItem(ctx context.Context, req *ItemReq) (*models.ItemRes, e
 	return res, nil
 }
 
-func (s *service) GetItem(ctx context.Context, name string) (*[]models.ItemRes, error) {
+func (s *Service) GetItem(ctx context.Context, name string) (*[]models.ItemRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -69,7 +67,7 @@ func (s *service) GetItem(ctx context.Context, name string) (*[]models.ItemRes, 
 	return &res, nil
 }
 
-func (s *service) GetItemByID(ctx context.Context, id string) (*models.ItemResByID, error) {
+func (s *Service) GetItemByID(ctx context.Context, id string) (*models.ItemResByID, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -98,7 +96,7 @@ func (s *service) GetItemByID(ctx context.Context, id string) (*models.ItemResBy
 	return res, nil
 }
 
-func (s *service) UpdateItem(ctx context.Context, req *UpdateReq) (*models.ItemRes, error) {
+func (s *Service) UpdateItem(ctx context.Context, req *UpdateReq) (*models.ItemRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -125,11 +123,11 @@ func (s *service) UpdateItem(ctx context.Context, req *UpdateReq) (*models.ItemR
 	return res, nil
 }
 
-func (s *service) DeleteItem(ctx context.Context, req *DelReq) error {
+func (s *Service) DeleteItem(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
-	err := s.ItemRepository.DeleteItem(ctx, req.ID.String())
+	err := s.ItemRepository.DeleteItem(ctx, id)
 	if err != nil {
 		return err
 	}

@@ -5,33 +5,31 @@ import (
 	"time"
 
 	"github.com/dzakimaulana/golaundry/pkg/models"
-	"github.com/google/uuid"
 )
 
-type service struct {
-	CustomerRespository
+type Service struct {
+	CustomerRepository
 	timeout time.Duration
 }
 
-func NewService(r CustomerRespository) CustomerService {
-	return &service{
-		CustomerRespository: r,
-		timeout:             time.Duration(2) * time.Second,
+func NewService(r CustomerRepository) CustomerService {
+	return &Service{
+		CustomerRepository: r,
+		timeout:            time.Duration(2) * time.Second,
 	}
 }
 
-func (s *service) AddNewCustomer(ctx context.Context, cs *CustomerReq) (*models.CustomerRes, error) {
+func (s *Service) AddNewCustomer(ctx context.Context, cs *CustomerReq) (*models.CustomerRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
 	c := &models.Customers{
-		ID:          uuid.New(),
 		Name:        cs.Name,
 		Address:     cs.Address,
 		PhoneNumber: cs.PhoneNumber,
 	}
 
-	r, err := s.CustomerRespository.AddNewCustomer(ctx, c)
+	r, err := s.CustomerRepository.AddNewCustomer(ctx, c)
 	if err != nil {
 		return nil, err
 	}
@@ -45,11 +43,11 @@ func (s *service) AddNewCustomer(ctx context.Context, cs *CustomerReq) (*models.
 	return res, nil
 }
 
-func (s *service) GetAllCustomers(ctx context.Context) (*[]models.CustomerRes, error) {
+func (s *Service) GetAllCustomers(ctx context.Context) (*[]models.CustomerRes, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
-	r, err := s.CustomerRespository.GetAllCustomer(ctx)
+	r, err := s.CustomerRepository.GetAllCustomers(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -66,11 +64,11 @@ func (s *service) GetAllCustomers(ctx context.Context) (*[]models.CustomerRes, e
 	return &allCs, nil
 }
 
-func (s *service) GetCustomerByID(ctx context.Context, id string) (*models.CustomerResByID, error) {
+func (s *Service) GetCustomerByID(ctx context.Context, id string) (*models.CustomerResByID, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
-	r, err := s.CustomerRespository.GetCustomerByID(ctx, id)
+	r, err := s.CustomerRepository.GetCustomerByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}

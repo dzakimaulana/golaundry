@@ -1,0 +1,52 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+      - name: Initialize and tidy Go modules
+        run: |
+          go mod init golaundry
+          go mod tidy
+      - name: Build
+        run: make build
+  
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-golang@v1
+        with: 
+          golang-version: 1.21
+      - name: Test with testing
+        run: |
+          make test
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build, tag, and push image to DockerHub
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          IMAGE_NAME: golaundry
+        run: |
+          docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME .
+          docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:latest

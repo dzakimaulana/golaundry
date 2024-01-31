@@ -14,5 +14,5 @@ func ItemRouter(h *items.Handler, f *fiber.App, session *session.Store) {
 	item.Get("/get", h.GetItem)
 	item.Get("/get/:id", h.GetItemByID)
 	item.Put("/update", middlewares.OnlyAdmin, h.UpdateItem)
-	item.Delete("/delete", middlewares.OnlyAdmin, h.DeleteItem)
+	item.Delete("/delete/:id", middlewares.OnlyAdmin, h.DeleteItem)
 }

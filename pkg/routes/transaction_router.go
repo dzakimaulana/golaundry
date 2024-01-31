@@ -13,6 +13,4 @@ func TransactionsRouter(h *transactions.Handler, f *fiber.App, session *session.
 	transaction.Post("/add", h.AddTs)
 	transaction.Get("/get", h.GetAllTs)
 	transaction.Get("/get/:id", h.GetTsByID)
-	// transaction.Put("/update")
-	// transaction.Delete("/delete")
 }

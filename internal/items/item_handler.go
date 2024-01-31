@@ -78,14 +78,9 @@ func (h *Handler) UpdateItem(c *fiber.Ctx) error {
 }
 
 func (h *Handler) DeleteItem(c *fiber.Ctx) error {
-	var item DelReq
-	if err := c.BodyParser(&item); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid JSON format",
-		})
-	}
+	id := c.Params("id")
 
-	err := h.ItemService.DeleteItem(c.Context(), &item)
+	err := h.ItemService.DeleteItem(c.Context(), id)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "internal server error",

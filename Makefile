@@ -9,7 +9,7 @@ run: build
 	${BUILD_DIR}/${BINARY_NAME}
 
 test:
-	go test -v ./...
+	go test -v ./internal/...
 
 clean:
 	go clean

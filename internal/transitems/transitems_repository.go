@@ -18,7 +18,7 @@ func NewRepository(db *gorm.DB) TransItemsRepository {
 }
 
 func (r *repository) AddTransItems(ctx context.Context, ti *[]models.TransactionsItems) (*[]models.TransactionsItems, error) {
-	if err := r.DB.Create(&ti).Error; err != nil {
+	if err := r.DB.WithContext(ctx).Create(&ti).Error; err != nil {
 		return nil, err
 	}
 	return ti, nil

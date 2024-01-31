@@ -12,9 +12,9 @@ type CustomerReq struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
-type CustomerRespository interface {
+type CustomerRepository interface {
 	AddNewCustomer(ctx context.Context, cs *models.Customers) (*models.Customers, error)
-	GetAllCustomer(ctx context.Context) (*[]models.Customers, error)
+	GetAllCustomers(ctx context.Context) (*[]models.Customers, error)
 	GetCustomerByID(ctx context.Context, id string) (*models.Customers, error)
 	FindCustomer(ctx context.Context, cs *models.Customers) (*models.Customers, error)
 }

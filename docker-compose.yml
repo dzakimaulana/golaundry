@@ -1,5 +1,14 @@
 version: "3.8"
 services:
+  golaundry:
+    container_name: golaundry
+    image: golaundry
+    restart: always
+    environment:
+      POSTGRES_HOST: postgres-golaundry
+      POSTGRES_PORT: 5432
+    ports:
+      - "8080:3000"
   postgres-golaundry:
     container_name: postgres-golaundry
     image: postgres

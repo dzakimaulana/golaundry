@@ -39,5 +39,5 @@ type ItemService interface {
 	GetItem(ctx context.Context, name string) (*[]models.ItemRes, error)
 	GetItemByID(ctx context.Context, id string) (*models.ItemResByID, error)
 	UpdateItem(ctx context.Context, req *UpdateReq) (*models.ItemRes, error)
-	DeleteItem(ctx context.Context, req *DelReq) error
+	DeleteItem(ctx context.Context, id string) error
 }
