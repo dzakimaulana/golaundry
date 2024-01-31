@@ -48,5 +48,5 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           IMAGE_NAME: golaundry
         run: |
-          docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME -f ./DOCKERFILE .
+          docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME -f ./Dockerfile .
           docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
