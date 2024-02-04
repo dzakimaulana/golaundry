@@ -12,4 +12,4 @@ RUN go build -o ./bin/golaundry ./cmd/golaundry/main.go
 
 EXPOSE 8080
 
-CMD ["./golaundry"]
+CMD ["./bin/golaundry"]

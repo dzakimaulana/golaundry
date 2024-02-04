@@ -40,3 +40,7 @@ services:
       - ./servers.json:/pgadmin4/servers.json
     ports:
       - "5050:80"
+  
+networks:
+  golaundry_network:
+    driver: bridge
