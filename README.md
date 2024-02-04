@@ -1,6 +1,5 @@
 <p align="center">
   <a href="" rel="noopener">
-<<<<<<< HEAD
  <img width=317.6px height=178.7px src="https://www.filepicker.io/api/file/O8dz87hXSheB05h3nO4M" alt="Project logo"></a>
 </p>
 
@@ -75,7 +74,7 @@ Will be saved in a ```cookie``` with name ```my-session```
 | PUT    | `/api/item/reset-password` |  YES  |
 | POST   | `/api/item/reset-password` |  YES  |
 
-### 🗄️File Structure
+## 🗄️File Structure
 In my project development practices, the adoption of the Repository Pattern plays a pivotal role in enhancing the modularity, maintainability, and testability of our codebase. 
 ```
 golaundry/
@@ -99,9 +98,4 @@ golaundry/
 │   └───utils
 └───servers.json
 ```
-=======
- <img width=200px height=200px src="https://www.filepicker.io/api/file/O8dz87hXSheB05h3nO4M" alt="Project logo"></a>
-</p>
 
-<h3 align="center">Golaundry</h3>
->>>>>>> 09fe03598d789674c670925a6e06b54349517575
