@@ -41,7 +41,7 @@ git clone https://github.com/dzakimaulana/golaundry.git
 docker compose up 
 ```
 
-## 📄 Api Documentation
+## 📃 Api Documentation
 ### Authorization
 Will be saved in a ```cookie``` with name ```my-session``` 
 ### Customer
